@@ -13,24 +13,24 @@
 13         to allow setting breakpoints, to provide hot reload, etc.
 14    -->
 15    <uses-permission android:name="android.permission.INTERNET" />
-15-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:3:5-67
-15-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:3:22-64
+15-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:3:5-67
+15-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:3:22-64
 16
 17    <queries>
-17-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:5:5-11:15
+17-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:5:5-11:15
 18        <intent>
-18-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:6:5-10:14
+18-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:6:5-10:14
 19            <action android:name="android.intent.action.VIEW" />
-19-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:7:9-61
-19-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:7:17-58
+19-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:7:9-61
+19-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:7:17-58
 20
 21            <category android:name="android.intent.category.BROWSABLE" />
-21-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:8:9-70
-21-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:8:19-67
+21-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:8:9-70
+21-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:8:19-67
 22
 23            <data android:scheme="https" />
-23-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:9:9-40
-23-->C:\Users\Vitor\Documents\GitHub\iptv-flutter\android\app\src\main\AndroidManifest.xml:9:15-37
+23-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:9:9-40
+23-->C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\android\app\src\main\AndroidManifest.xml:9:15-37
 24        </intent>
 25    </queries>
 26
@@ -44,7 +44,7 @@
 31-->[androidx.core:core:1.7.0] C:\Users\Vitor\.gradle\caches\transforms-3\643c36827667a18b446caa098937e0bd\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
 32        android:debuggable="true"
 33        android:icon="@mipmap/ic_launcher"
-34        android:label="Televido"
+34        android:label="Televido TV"
 35        android:usesCleartextTraffic="true" >
 36        <activity
 37            android:name="com.example.iptv_flutter_app.MainActivity"
@@ -80,13 +80,13 @@
 67            android:value="2" />
 68
 69        <activity
-69-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-13:74
+69-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-13:74
 70            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-70-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-74
+70-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-74
 71            android:exported="false"
-71-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-37
+71-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-37
 72            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-72-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-71
+72-->[:url_launcher_android] C:\Users\Vitor\Documents\GitHub\iptv-flutter-tv\iptv-tv\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-71
 73
 74        <uses-library
 74-->[androidx.window:window:1.0.0-beta04] C:\Users\Vitor\.gradle\caches\transforms-3\b734f4f2ef56619cfc425335a55b8ea1\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40

@@ -1,7 +1,7 @@
-#Fri Mar 31 22:12:01 BRT 2023
-base.1=C\:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes2.dex
+#Sat Apr 01 09:39:22 BRT 2023
+base.1=C\:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter-tv\\iptv-tv\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes2.dex
 path.1=classes2.dex
-base.0=C\:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+base.0=C\:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter-tv\\iptv-tv\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
 path.0=classes.dex
