@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:iptv_flutter_app/videoplayer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 import 'Services/api.dart';
+import 'login.dart';
 
 void main() {
   runApp(seassonspage(parametro: null, category: null));
@@ -23,6 +26,12 @@ class _seassonspage extends State<seassonspage> {
   List<dynamic> channels = [];
   List<dynamic> channels2 = [];
   var selectedCategory = 0;
+  int _selectedIndex = 0; // armazena o índice do botão selecionado
+  List<Color> _buttonColors = List.generate(
+    //lista de cores
+    100,
+    (index) => Colors.black,
+  );
 
   @override
   void initState() {
@@ -30,14 +39,88 @@ class _seassonspage extends State<seassonspage> {
     fetchChannels();
   }
 
+  Future<void> _showTokenExpiredPopup(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Token expirado'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Favor fazer login novamente.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Loginpage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showErrorPopup(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro ao se conectar com servidor'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Favor entrar em contato com administrador'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Loginpage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> fetchChannels() async {
-    final response = await http.get(apifunction('/iptv/serie'));
-    final parsedResponse = jsonDecode(response.body);
-    setState(() {
-      channels = parsedResponse;
-      channels2 =
-          channels[widget.category]['series'][widget.parametro]['episodes'];
-    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    try {
+      final response = await http.get(
+        apifunction('/iptv/serie'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      final parsedResponse = jsonDecode(response.body);
+      setState(() {
+        channels = parsedResponse;
+        channels2 =
+            channels[widget.category]['series'][widget.parametro]['episodes'];
+      });
+    } catch (error) {
+      if (error is http.Response &&
+          error.statusCode == 401 &&
+          error.statusCode == 500) {
+        _showErrorPopup(context);
+      } else {}
+    }
+    if (channels2[0] == null) {
+      _showTokenExpiredPopup(context);
+    }
   }
 
   waiting(channels) {
@@ -53,19 +136,35 @@ class _seassonspage extends State<seassonspage> {
             child: ListView.builder(
               itemCount: channels2.length,
               itemBuilder: (context, index) {
-                final category = channels2;
-
                 return ElevatedButton(
-                  onPressed: () => updateSelectedCategory(index),
+                  onPressed: () {
+                    updateSelectedCategory(index);
+                    setState(() {
+                      if (_selectedIndex == index) {
+                        _selectedIndex = -1; // deselecionar o botão
+                        _buttonColors[index] = Colors
+                            .black; // definir a cor preta para o botão deselecionado
+                      } else {
+                        if (_selectedIndex != -1) {
+                          _buttonColors[_selectedIndex] = Colors
+                              .black; // definir a cor preta para o botão anteriormente selecionado
+                        }
+                        _selectedIndex = index; // selecionar o novo botão
+                        _buttonColors[_selectedIndex] = Colors
+                            .red; // definir a cor vermelha para o botão selecionado
+                      }
+                    });
+                  },
                   child: Text(
                     'Sesson ${index + 1}',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                      side: BorderSide(width: 1.0, color: Colors.white),
-                      backgroundColor: Colors.red),
+                    side: BorderSide(width: 1.0, color: Colors.white),
+                    backgroundColor: _buttonColors[index],
+                  ),
                 );
               },
             ),
@@ -84,35 +183,91 @@ class _seassonspage extends State<seassonspage> {
                       itemBuilder: (context, index) {
                         final item = channels2[selectedCategory][index];
 
-                        return Padding(
-                          padding: EdgeInsets.all(5),
-                          child: ElevatedButton(
-                            onPressed: () =>
-                                handleChannelPress(item['link'], context),
-                            style: ElevatedButton.styleFrom(
-                              primary: Color.fromARGB(255, 0, 0, 0),
-                              onPrimary: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                side: BorderSide(color: Colors.white, width: 2),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: logo(item['logo'])),
-                                Padding(
-                                  padding: EdgeInsets.all(0),
-                                  child: Text(
-                                    item['dataName'],
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        return Expanded(
+                            flex: 2,
+                            child: Container(
+                                height: 50.w,
+                                child: ElevatedButton(
+                                    onPressed: () => handleChannelPress(
+                                        item['link'], context),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.black,
+                                      onPrimary: Colors.white,
+                                    ),
+                                    child: Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        height: 50.w,
+                                        child: ElevatedButton(
+                                          onPressed: () => handleChannelPress(
+                                              item['link'], context),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.black,
+                                            onPrimary: Colors.white,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Stack(
+                                                children: [
+                                                  Container(
+                                                    height: 45.w,
+                                                    width: double.infinity,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      child: item['logo'] !=
+                                                                  null &&
+                                                              item['logo'] != ''
+                                                          ? Image.network(
+                                                              item['logo'],
+                                                              fit: BoxFit
+                                                                  .scaleDown,
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                            )
+                                                          : Image.asset(
+                                                              'assets/images/notfound.png',
+                                                              fit: BoxFit
+                                                                  .scaleDown,
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                            ),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      color: Colors.black
+                                                          .withOpacity(1),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 2.h,
+                                                              horizontal: 5.w),
+                                                      child: Text(
+                                                        item['dataName'],
+                                                        style: TextStyle(
+                                                          fontSize: 8.sp,
+                                                          color: Colors.white,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ))));
                       }))
             ])))
       ]),
@@ -158,6 +313,9 @@ class _seassonspage extends State<seassonspage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'IPTV Channels',
-        home: Scaffold(backgroundColor: Colors.black, body: waiting(channels)));
+        home: Sizer(builder: (context, orientation, deviceType) {
+          return Scaffold(
+              backgroundColor: Colors.black, body: waiting(channels));
+        }));
   }
 }
