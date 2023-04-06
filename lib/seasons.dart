@@ -9,25 +9,28 @@ import 'Services/api.dart';
 import 'login.dart';
 
 void main() {
-  runApp(seassonspage(parametro: null, category: null));
+  runApp(const SeassonPage(parametro: null, category: null));
 }
 
-class seassonspage extends StatefulWidget {
+class SeassonPage extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final parametro;
+  // ignore: prefer_typing_uninitialized_variables
   final category;
 
-  seassonspage({Key? key, required this.parametro, required this.category})
+  const SeassonPage({Key? key, required this.parametro, required this.category})
       : super(key: key);
   @override
-  _seassonspage createState() => _seassonspage();
+  // ignore: library_private_types_in_public_api
+  _SeassonPage createState() => _SeassonPage();
 }
 
-class _seassonspage extends State<seassonspage> {
+class _SeassonPage extends State<SeassonPage> {
   List<dynamic> channels = [];
   List<dynamic> channels2 = [];
   var selectedCategory = 0;
   int _selectedIndex = 0; // armazena o índice do botão selecionado
-  List<Color> _buttonColors = List.generate(
+  final List<Color> _buttonColors = List.generate(
     //lista de cores
     100,
     (index) => Colors.black,
@@ -45,8 +48,8 @@ class _seassonspage extends State<seassonspage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Token expirado'),
-          content: SingleChildScrollView(
+          title: const Text('Token expirado'),
+          content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor fazer login novamente.'),
@@ -55,11 +58,11 @@ class _seassonspage extends State<seassonspage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Loginpage()));
+                    MaterialPageRoute(builder: (context) => const Loginpage()));
               },
             ),
           ],
@@ -74,8 +77,8 @@ class _seassonspage extends State<seassonspage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Erro ao se conectar com servidor'),
-          content: SingleChildScrollView(
+          title: const Text('Erro ao se conectar com servidor'),
+          content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor entrar em contato com administrador'),
@@ -84,11 +87,11 @@ class _seassonspage extends State<seassonspage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Loginpage()));
+                    MaterialPageRoute(builder: (context) => const Loginpage()));
               },
             ),
           ],
@@ -115,69 +118,69 @@ class _seassonspage extends State<seassonspage> {
       if (error is http.Response &&
           error.statusCode == 401 &&
           error.statusCode == 500) {
+        // ignore: use_build_context_synchronously
         _showErrorPopup(context);
       } else {}
     }
     if (channels2[0] == null) {
+      // ignore: use_build_context_synchronously
       _showTokenExpiredPopup(context);
     }
   }
 
   waiting(channels) {
     while (channels.isEmpty) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
     return Padding(
-      padding: EdgeInsets.only(top: 25, left: 10, right: 10),
+      padding: const EdgeInsets.only(top: 25, left: 10, right: 10),
       child: Row(children: [
         Expanded(
           flex: 1,
-          child: Container(
-            child: ListView.builder(
-              itemCount: channels2.length,
-              itemBuilder: (context, index) {
-                return ElevatedButton(
-                  onPressed: () {
-                    updateSelectedCategory(index);
-                    setState(() {
-                      if (_selectedIndex == index) {
-                        _selectedIndex = -1; // deselecionar o botão
-                        _buttonColors[index] = Colors
-                            .black; // definir a cor preta para o botão deselecionado
-                      } else {
-                        if (_selectedIndex != -1) {
-                          _buttonColors[_selectedIndex] = Colors
-                              .black; // definir a cor preta para o botão anteriormente selecionado
-                        }
-                        _selectedIndex = index; // selecionar o novo botão
+          child: ListView.builder(
+            itemCount: channels2.length,
+            itemBuilder: (context, index) {
+              return ElevatedButton(
+                onPressed: () {
+                  updateSelectedCategory(index);
+                  setState(() {
+                    if (_selectedIndex == index) {
+                      _selectedIndex = -1; // deselecionar o botão
+                      _buttonColors[index] = Colors
+                          .black; // definir a cor preta para o botão deselecionado
+                    } else {
+                      if (_selectedIndex != -1) {
                         _buttonColors[_selectedIndex] = Colors
-                            .red; // definir a cor vermelha para o botão selecionado
+                            .black; // definir a cor preta para o botão anteriormente selecionado
                       }
-                    });
-                  },
-                  child: Text(
-                    'Sesson ${index + 1}',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                      _selectedIndex = index; // selecionar o novo botão
+                      _buttonColors[_selectedIndex] = Colors
+                          .red; // definir a cor vermelha para o botão selecionado
+                    }
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(width: 1.0, color: Colors.white),
+                  backgroundColor: _buttonColors[index],
+                ),
+                child: Text(
+                  'Sesson ${index + 1}',
+                  style: const TextStyle(
+                    color: Colors.white,
                   ),
-                  style: ElevatedButton.styleFrom(
-                    side: BorderSide(width: 1.0, color: Colors.white),
-                    backgroundColor: _buttonColors[index],
-                  ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
         Expanded(
             flex: 3,
-            child: Container(
-                child: Column(children: [
+            child: Column(children: [
               Expanded(
                   child: GridView.builder(
                       itemCount: channels2[selectedCategory].length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                       ),
                       itemBuilder: (context, index) {
@@ -185,31 +188,31 @@ class _seassonspage extends State<seassonspage> {
 
                         return Expanded(
                             flex: 2,
-                            child: Container(
+                            child: SizedBox(
                                 height: 50.w,
                                 child: ElevatedButton(
                                     onPressed: () => handleChannelPress(
                                         item['link'], context),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.black,
-                                      onPrimary: Colors.white,
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: Colors.black,
                                     ),
                                     child: Expanded(
                                       flex: 1,
-                                      child: Container(
+                                      child: SizedBox(
                                         height: 50.w,
                                         child: ElevatedButton(
                                           onPressed: () => handleChannelPress(
                                               item['link'], context),
                                           style: ElevatedButton.styleFrom(
-                                            primary: Colors.black,
-                                            onPrimary: Colors.white,
+                                            foregroundColor: Colors.white,
+                                            backgroundColor: Colors.black,
                                           ),
                                           child: Column(
                                             children: [
                                               Stack(
                                                 children: [
-                                                  Container(
+                                                  SizedBox(
                                                     height: 45.w,
                                                     width: double.infinity,
                                                     child: ClipRRect(
@@ -269,7 +272,7 @@ class _seassonspage extends State<seassonspage> {
                                       ),
                                     ))));
                       }))
-            ])))
+            ]))
       ]),
     );
   }
@@ -282,7 +285,7 @@ class _seassonspage extends State<seassonspage> {
 
   Widget logo(String movielogo) {
     if (movielogo == '') {
-      return Image(
+      return const Image(
         image: AssetImage('assets/images/notfound.jpg'),
         height: 120,
       );
@@ -292,7 +295,7 @@ class _seassonspage extends State<seassonspage> {
         height: 120,
         errorBuilder:
             (BuildContext context, Object exception, StackTrace? stackTrace) {
-          return Image(
+          return const Image(
             image: AssetImage('assets/images/notfound.jpg'),
             height: 120,
           );

@@ -30,15 +30,103 @@ class _LoginpageState extends State<Loginpage> {
   var password = '';
   var errorMessage = '';
   var isLoading = true;
+  List<dynamic> channels = [];
+  String selectedCategory = '';
+
+  Future<void> _showTokenExpiredPopup(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Token expirado'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Favor fazer login novamente.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Loginpage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showErrorPopup(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Erro ao se conectar com servidor'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Favor entrar em contato com administrador'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Loginpage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> iniciando(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
     if (token != null) {
-      print(token);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      try {
+        final response = await http.get(
+          apifunction('/iptv/channel'),
+          headers: {'Authorization': 'Bearer $token'},
+        );
+        final parsedResponse = jsonDecode(response.body);
+        setState(() {
+          channels = parsedResponse;
+          selectedCategory = channels[0]['category'];
+        });
+      } catch (error) {
+        if (error is http.Response &&
+            error.statusCode == 401 &&
+            error.statusCode == 500) {
+          // ignore: use_build_context_synchronously
+          _showErrorPopup(context);
+        } else {}
+      }
+
+      // ignore: unnecessary_null_comparison
+      if (selectedCategory[0] == null) {
+        // ignore: use_build_context_synchronously
+        _showTokenExpiredPopup(context);
+      }
     } else {
-      return;
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const ChoicePage()));
     }
   }
 
@@ -49,31 +137,43 @@ class _LoginpageState extends State<Loginpage> {
       final body =
           json.encode({'username': user.toLowerCase(), 'password': password});
       final response = await http.post(url, headers: headers, body: body);
+
       if (json.decode(response.body)['message'] ==
-          'Username or Password invalid.') {
+          'User or Password invalid.') {
         setState(() {
           errorMessage = 'Usuario ou senha invalido';
           isLoading = true;
         });
-        Timer(Duration(seconds: 5), () {
+        Timer(const Duration(seconds: 5), () {
+          setState(() {
+            errorMessage = '';
+          });
+        });
+      } else if (json.decode(response.body)['message'] == 'Payment expired.') {
+        setState(() {
+          errorMessage =
+              'Usuario expirado, favor entrar em contato com o administrador';
+          isLoading = true;
+        });
+        Timer(const Duration(seconds: 5), () {
           setState(() {
             errorMessage = '';
           });
         });
       } else {
-        print(response.body);
         final token = json.decode(response.body)['token'];
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', token);
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => choicepage()));
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const ChoicePage()));
       }
     } catch (e) {
       setState(() {
         errorMessage = 'Erro ao conectar-se com servidor';
         isLoading = true;
       });
-      Timer(Duration(seconds: 5), () {
+      Timer(const Duration(seconds: 5), () {
         setState(() {
           errorMessage = '';
         });
@@ -93,7 +193,7 @@ class _LoginpageState extends State<Loginpage> {
               style: ButtonStyle(backgroundColor:
                   MaterialStateProperty.resolveWith<Color>((states) {
                 if (_isFocusedLogin) {
-                  return Color.fromARGB(255, 142, 192, 233);
+                  return const Color.fromARGB(255, 142, 192, 233);
                 } else {
                   return Colors.blue;
                 }
@@ -103,7 +203,7 @@ class _LoginpageState extends State<Loginpage> {
                   setState(() {
                     errorMessage = 'Preencha usuário e senha';
                   });
-                  Timer(Duration(seconds: 5), () {
+                  Timer(const Duration(seconds: 5), () {
                     setState(() {
                       errorMessage = '';
                     });
@@ -115,9 +215,9 @@ class _LoginpageState extends State<Loginpage> {
                   });
                 }
               },
-              child: Text('Login')));
+              child: const Text('Login')));
     } else {
-      return CircularProgressIndicator(color: Colors.red);
+      return const CircularProgressIndicator(color: Colors.red);
     }
   }
 
@@ -168,7 +268,8 @@ class _LoginpageState extends State<Loginpage> {
                                 enabled: foco,
                                 decoration: InputDecoration(
                                   labelText: "Digite o Usuario",
-                                  labelStyle: TextStyle(color: Colors.black),
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black),
                                   border: InputBorder.none,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 5.w, vertical: 2.w),
@@ -194,7 +295,7 @@ class _LoginpageState extends State<Loginpage> {
                                         MaterialStateProperty.resolveWith<
                                             Color>((states) {
                                       if (_isFocusedUser) {
-                                        return Color.fromARGB(
+                                        return const Color.fromARGB(
                                             255, 142, 192, 233);
                                       } else {
                                         return Colors.blue;
@@ -204,12 +305,13 @@ class _LoginpageState extends State<Loginpage> {
                                       setState(() {
                                         foco = true;
                                       });
-                                      Timer(Duration(milliseconds: 500), () {
+                                      Timer(const Duration(milliseconds: 500),
+                                          () {
                                         FocusScope.of(context)
                                             .requestFocus(_focusNodeEdituser);
                                       });
                                     },
-                                    child: Row(
+                                    child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
@@ -243,7 +345,8 @@ class _LoginpageState extends State<Loginpage> {
                                 obscureText: true,
                                 decoration: InputDecoration(
                                     labelText: "Digite a Senha",
-                                    labelStyle: TextStyle(color: Colors.black),
+                                    labelStyle:
+                                        const TextStyle(color: Colors.black),
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.symmetric(
                                         horizontal: 5.w, vertical: 2.w)),
@@ -268,7 +371,7 @@ class _LoginpageState extends State<Loginpage> {
                                         MaterialStateProperty.resolveWith<
                                             Color>((states) {
                                       if (_isFocusedPass) {
-                                        return Color.fromARGB(
+                                        return const Color.fromARGB(
                                             255, 142, 192, 233);
                                       } else {
                                         return Colors.blue;
@@ -278,12 +381,13 @@ class _LoginpageState extends State<Loginpage> {
                                       setState(() {
                                         foco2 = true;
                                       });
-                                      Timer(Duration(milliseconds: 500), () {
+                                      Timer(const Duration(milliseconds: 500),
+                                          () {
                                         FocusScope.of(context)
                                             .requestFocus(_focusNodeEditpass);
                                       });
                                     },
-                                    child: Row(
+                                    child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
@@ -323,14 +427,14 @@ class _LoginpageState extends State<Loginpage> {
                             'Contato: (81) 98671-6936',
                             style: TextStyle(
                                 color: _isFocusedwpp
-                                    ? Color.fromARGB(255, 150, 203, 241)
+                                    ? const Color.fromARGB(255, 150, 203, 241)
                                     : Colors.blue),
                           ),
                         )),
                     SizedBox(height: 1.w),
-                    Text(
+                    const Text(
                       'Devs: GwTo / D3Gs',
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                      style: TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ],
                 ),

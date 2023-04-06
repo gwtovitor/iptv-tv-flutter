@@ -10,16 +10,18 @@ void main() {
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
-    runApp(VideoPlayerScreen(parametro: 'meu parametro'));
+    runApp(const VideoPlayerScreen(parametro: 'meu parametro'));
   });
 }
 
 class VideoPlayerScreen extends StatefulWidget {
   final String parametro;
 
-  VideoPlayerScreen({Key? key, required this.parametro}) : super(key: key);
+  const VideoPlayerScreen({Key? key, required this.parametro})
+      : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
@@ -46,7 +48,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     if (!_videoPlayerController.value.isInitialized) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     return AspectRatio(
@@ -57,7 +59,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           VideoPlayer(_videoPlayerController),
           AnimatedOpacity(
             opacity: _showProgressIndicator ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             child: Align(
               alignment: Alignment.center,
               child: Icon(
@@ -79,7 +81,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               } else {
                 _videoPlayerController.play();
 
-                Timer(Duration(seconds: 3), () {
+                Timer(const Duration(seconds: 3), () {
                   setState(() {
                     _showProgressIndicator = false;
                   });
@@ -90,7 +92,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           ),
           AnimatedOpacity(
             opacity: _showProgressIndicator ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             child: Align(
               alignment: Alignment.bottomCenter,
               child: VideoProgressIndicator(

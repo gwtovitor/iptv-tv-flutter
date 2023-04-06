@@ -9,15 +9,15 @@ import 'Services/api.dart';
 import 'login.dart';
 
 void main() {
-  runApp(seriespage());
+  runApp(SeriesPage());
 }
 
-class seriespage extends StatefulWidget {
+class SeriesPage extends StatefulWidget {
   @override
-  _seriespage createState() => _seriespage();
+  _SeriesPage createState() => _SeriesPage();
 }
 
-class _seriespage extends State<seriespage> {
+class _SeriesPage extends State<SeriesPage> {
   List<dynamic> channels = [];
   String selectedCategory = '';
   var indice = 0;
@@ -269,7 +269,7 @@ class _seriespage extends State<seriespage> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              seassonspage(parametro: index, category: category)),
+              SeassonPage(parametro: index, category: category)),
     );
   }
 
