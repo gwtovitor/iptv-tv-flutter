@@ -9,28 +9,25 @@ import 'Services/api.dart';
 import 'login.dart';
 
 void main() {
-  runApp(const SeassonPage(parametro: null, category: null));
+  runApp(seassonspage(parametro: null, category: null));
 }
 
-class SeassonPage extends StatefulWidget {
-  // ignore: prefer_typing_uninitialized_variables
+class seassonspage extends StatefulWidget {
   final parametro;
-  // ignore: prefer_typing_uninitialized_variables
   final category;
 
-  const SeassonPage({Key? key, required this.parametro, required this.category})
+  seassonspage({Key? key, required this.parametro, required this.category})
       : super(key: key);
   @override
-  // ignore: library_private_types_in_public_api
-  _SeassonPage createState() => _SeassonPage();
+  _seassonspage createState() => _seassonspage();
 }
 
-class _SeassonPage extends State<SeassonPage> {
+class _seassonspage extends State<seassonspage> {
   List<dynamic> channels = [];
   List<dynamic> channels2 = [];
   var selectedCategory = 0;
   int _selectedIndex = 0; // armazena o índice do botão selecionado
-  final List<Color> _buttonColors = List.generate(
+  List<Color> _buttonColors = List.generate(
     //lista de cores
     100,
     (index) => Colors.black,
@@ -48,8 +45,8 @@ class _SeassonPage extends State<SeassonPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Token expirado'),
-          content: const SingleChildScrollView(
+          title: Text('Token expirado'),
+          content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor fazer login novamente.'),
@@ -58,11 +55,11 @@ class _SeassonPage extends State<SeassonPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Loginpage()));
+                    MaterialPageRoute(builder: (context) => Loginpage()));
               },
             ),
           ],
@@ -77,8 +74,8 @@ class _SeassonPage extends State<SeassonPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro ao se conectar com servidor'),
-          content: const SingleChildScrollView(
+          title: Text('Erro ao se conectar com servidor'),
+          content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor entrar em contato com administrador'),
@@ -87,11 +84,11 @@ class _SeassonPage extends State<SeassonPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Loginpage()));
+                    MaterialPageRoute(builder: (context) => Loginpage()));
               },
             ),
           ],
@@ -118,69 +115,69 @@ class _SeassonPage extends State<SeassonPage> {
       if (error is http.Response &&
           error.statusCode == 401 &&
           error.statusCode == 500) {
-        // ignore: use_build_context_synchronously
         _showErrorPopup(context);
       } else {}
     }
     if (channels2[0] == null) {
-      // ignore: use_build_context_synchronously
       _showTokenExpiredPopup(context);
     }
   }
 
   waiting(channels) {
     while (channels.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 25, left: 10, right: 10),
+      padding: EdgeInsets.only(top: 25, left: 10, right: 10),
       child: Row(children: [
         Expanded(
           flex: 1,
-          child: ListView.builder(
-            itemCount: channels2.length,
-            itemBuilder: (context, index) {
-              return ElevatedButton(
-                onPressed: () {
-                  updateSelectedCategory(index);
-                  setState(() {
-                    if (_selectedIndex == index) {
-                      _selectedIndex = -1; // deselecionar o botão
-                      _buttonColors[index] = Colors
-                          .black; // definir a cor preta para o botão deselecionado
-                    } else {
-                      if (_selectedIndex != -1) {
+          child: Container(
+            child: ListView.builder(
+              itemCount: channels2.length,
+              itemBuilder: (context, index) {
+                return ElevatedButton(
+                  onPressed: () {
+                    updateSelectedCategory(index);
+                    setState(() {
+                      if (_selectedIndex == index) {
+                        _selectedIndex = -1; // deselecionar o botão
+                        _buttonColors[index] = Colors
+                            .black; // definir a cor preta para o botão deselecionado
+                      } else {
+                        if (_selectedIndex != -1) {
+                          _buttonColors[_selectedIndex] = Colors
+                              .black; // definir a cor preta para o botão anteriormente selecionado
+                        }
+                        _selectedIndex = index; // selecionar o novo botão
                         _buttonColors[_selectedIndex] = Colors
-                            .black; // definir a cor preta para o botão anteriormente selecionado
+                            .red; // definir a cor vermelha para o botão selecionado
                       }
-                      _selectedIndex = index; // selecionar o novo botão
-                      _buttonColors[_selectedIndex] = Colors
-                          .red; // definir a cor vermelha para o botão selecionado
-                    }
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width: 1.0, color: Colors.white),
-                  backgroundColor: _buttonColors[index],
-                ),
-                child: Text(
-                  'Sesson ${index + 1}',
-                  style: const TextStyle(
-                    color: Colors.white,
+                    });
+                  },
+                  child: Text(
+                    'Sesson ${index + 1}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              );
-            },
+                  style: ElevatedButton.styleFrom(
+                    side: BorderSide(width: 1.0, color: Colors.white),
+                    backgroundColor: _buttonColors[index],
+                  ),
+                );
+              },
+            ),
           ),
         ),
         Expanded(
             flex: 3,
-            child: Column(children: [
+            child: Container(
+                child: Column(children: [
               Expanded(
                   child: GridView.builder(
                       itemCount: channels2[selectedCategory].length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                       ),
                       itemBuilder: (context, index) {
@@ -188,31 +185,31 @@ class _SeassonPage extends State<SeassonPage> {
 
                         return Expanded(
                             flex: 2,
-                            child: SizedBox(
+                            child: Container(
                                 height: 50.w,
                                 child: ElevatedButton(
                                     onPressed: () => handleChannelPress(
                                         item['link'], context),
                                     style: ElevatedButton.styleFrom(
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: Colors.black,
+                                      primary: Colors.black,
+                                      onPrimary: Colors.white,
                                     ),
                                     child: Expanded(
                                       flex: 1,
-                                      child: SizedBox(
+                                      child: Container(
                                         height: 50.w,
                                         child: ElevatedButton(
                                           onPressed: () => handleChannelPress(
                                               item['link'], context),
                                           style: ElevatedButton.styleFrom(
-                                            foregroundColor: Colors.white,
-                                            backgroundColor: Colors.black,
+                                            primary: Colors.black,
+                                            onPrimary: Colors.white,
                                           ),
                                           child: Column(
                                             children: [
                                               Stack(
                                                 children: [
-                                                  SizedBox(
+                                                  Container(
                                                     height: 45.w,
                                                     width: double.infinity,
                                                     child: ClipRRect(
@@ -272,7 +269,7 @@ class _SeassonPage extends State<SeassonPage> {
                                       ),
                                     ))));
                       }))
-            ]))
+            ])))
       ]),
     );
   }
@@ -285,7 +282,7 @@ class _SeassonPage extends State<SeassonPage> {
 
   Widget logo(String movielogo) {
     if (movielogo == '') {
-      return const Image(
+      return Image(
         image: AssetImage('assets/images/notfound.jpg'),
         height: 120,
       );
@@ -295,7 +292,7 @@ class _SeassonPage extends State<SeassonPage> {
         height: 120,
         errorBuilder:
             (BuildContext context, Object exception, StackTrace? stackTrace) {
-          return const Image(
+          return Image(
             image: AssetImage('assets/images/notfound.jpg'),
             height: 120,
           );

@@ -9,23 +9,20 @@ import 'package:sizer/sizer.dart';
 import 'Services/api.dart';
 
 void main() {
-  runApp(const MoviesPage());
+  runApp(moviespage());
 }
 
-class MoviesPage extends StatefulWidget {
-  const MoviesPage({super.key});
-
+class moviespage extends StatefulWidget {
   @override
-  // ignore: library_private_types_in_public_api
-  _MoviesPage createState() => _MoviesPage();
+  _moviespage createState() => _moviespage();
 }
 
-class _MoviesPage extends State<MoviesPage> {
+class _moviespage extends State<moviespage> {
   List<dynamic> channels = [];
   String selectedCategory = '';
   var jsonOk = '';
   int _selectedIndex = 0; // armazena o índice do botão selecionado
-  final List<Color> _buttonColors = List.generate(
+  List<Color> _buttonColors = List.generate(
     //lista de cores
     100,
     (index) => Colors.black,
@@ -43,8 +40,8 @@ class _MoviesPage extends State<MoviesPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Token expirado'),
-          content: const SingleChildScrollView(
+          title: Text('Token expirado'),
+          content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor fazer login novamente.'),
@@ -53,11 +50,11 @@ class _MoviesPage extends State<MoviesPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Loginpage()));
+                    MaterialPageRoute(builder: (context) => Loginpage()));
               },
             ),
           ],
@@ -72,8 +69,8 @@ class _MoviesPage extends State<MoviesPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro ao se conectar com servidor'),
-          content: const SingleChildScrollView(
+          title: Text('Erro ao se conectar com servidor'),
+          content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor entrar em contato com administrador'),
@@ -82,11 +79,11 @@ class _MoviesPage extends State<MoviesPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Loginpage()));
+                    MaterialPageRoute(builder: (context) => Loginpage()));
               },
             ),
           ],
@@ -113,13 +110,10 @@ class _MoviesPage extends State<MoviesPage> {
       if (error is http.Response &&
           error.statusCode == 401 &&
           error.statusCode == 500) {
-        // ignore: use_build_context_synchronously
         _showErrorPopup(context);
       } else {}
     }
-    // ignore: unnecessary_null_comparison
     if (selectedCategory == null) {
-      // ignore: use_build_context_synchronously
       _showTokenExpiredPopup(context);
     }
   }
@@ -140,56 +134,59 @@ class _MoviesPage extends State<MoviesPage> {
 
   waiting() {
     while (channels.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 25, left: 10, right: 10),
+      padding: EdgeInsets.only(top: 25, left: 10, right: 10),
       child: Row(children: [
         Expanded(
           flex: 1,
-          child: ListView.builder(
-              itemCount: channels.length,
-              itemBuilder: (context, index) {
-                final category = channels[index]['category'];
-                return StatefulBuilder(
-                  builder: (BuildContext context,
-                      StateSetter setState /*You can rename this!*/) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        updateSelectedCategory(category);
-                        setState(() {
-                          if (_selectedIndex == index) {
-                            _selectedIndex = -1; // deselecionar o botão
-                            _buttonColors[index] = Colors
-                                .black; // definir a cor preta para o botão deselecionado
-                          } else {
-                            if (_selectedIndex != -1) {
+          child: Container(
+            child: ListView.builder(
+                itemCount: channels.length,
+                itemBuilder: (context, index) {
+                  final category = channels[index]['category'];
+                  return StatefulBuilder(
+                    builder: (BuildContext context,
+                        StateSetter setState /*You can rename this!*/) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          updateSelectedCategory(category);
+                          setState(() {
+                            if (_selectedIndex == index) {
+                              _selectedIndex = -1; // deselecionar o botão
+                              _buttonColors[index] = Colors
+                                  .black; // definir a cor preta para o botão deselecionado
+                            } else {
+                              if (_selectedIndex != -1) {
+                                _buttonColors[_selectedIndex] = Colors
+                                    .black; // definir a cor preta para o botão anteriormente selecionado
+                              }
+                              _selectedIndex = index; // selecionar o novo botão
                               _buttonColors[_selectedIndex] = Colors
-                                  .black; // definir a cor preta para o botão anteriormente selecionado
+                                  .red; // definir a cor vermelha para o botão selecionado
                             }
-                            _selectedIndex = index; // selecionar o novo botão
-                            _buttonColors[_selectedIndex] = Colors
-                                .red; // definir a cor vermelha para o botão selecionado
-                          }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: _buttonColors[index],
-                          side:
-                              const BorderSide(width: 1, color: Colors.white)),
-                      child: Text(
-                        category,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 10.sp),
-                      ),
-                    );
-                  },
-                );
-              }),
+                          });
+                        },
+                        child: Text(
+                          category,
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 10.sp),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: _buttonColors[index],
+                            side: BorderSide(width: 1, color: Colors.white)),
+                      );
+                    },
+                  );
+                }),
+          ),
         ),
         Expanded(
             flex: 3,
-            child: Column(children: [
+            child: Container(
+                child: Column(children: [
               Padding(
                 padding: EdgeInsets.only(
                   left: 0,
@@ -197,7 +194,7 @@ class _MoviesPage extends State<MoviesPage> {
                 ),
                 child: Text(
                   selectedCategory,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -213,21 +210,21 @@ class _MoviesPage extends State<MoviesPage> {
                       .expand((channel) => channel['resultList'])
                       .map((movie) => Expanded(
                             flex: 2,
-                            child: SizedBox(
-                              height: 45.w,
+                            child: Container(
+                              height: 50.w,
                               child: ElevatedButton(
                                 onPressed: () =>
                                     handleChannelPress(movie['link'], context),
                                 style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.black,
+                                  primary: Colors.black,
+                                  onPrimary: Colors.white,
                                 ),
                                 child: Column(
                                   children: [
                                     Stack(
                                       children: [
-                                        SizedBox(
-                                          height: 40.w,
+                                        Container(
+                                          height: 45.w,
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
@@ -275,7 +272,7 @@ class _MoviesPage extends State<MoviesPage> {
                       .toList(),
                 ),
               )
-            ]))
+            ])))
       ]),
     );
   }

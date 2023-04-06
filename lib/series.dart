@@ -102,7 +102,6 @@ class _seriespage extends State<seriespage> {
         headers: {'Authorization': 'Bearer $token'},
       );
       final parsedResponse = jsonDecode(response.body);
-      print(parsedResponse);
       setState(() {
         channels = parsedResponse;
         selectedCategory = channels[0]['category'];
@@ -270,7 +269,7 @@ class _seriespage extends State<seriespage> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              SeassonPage(parametro: index, category: category)),
+              seassonspage(parametro: index, category: category)),
     );
   }
 

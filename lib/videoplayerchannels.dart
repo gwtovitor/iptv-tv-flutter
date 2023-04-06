@@ -6,17 +6,15 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
 
-  runApp(const VideoPlayerScreen(parametro: 'meu parametro'));
+  runApp(VideoPlayerScreen(parametro: 'meu parametro'));
 }
 
 class VideoPlayerScreen extends StatefulWidget {
   final String parametro;
 
-  const VideoPlayerScreen({Key? key, required this.parametro})
-      : super(key: key);
+  VideoPlayerScreen({Key? key, required this.parametro}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
@@ -41,7 +39,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     if (!_videoPlayerController.value.isInitialized) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
     return AspectRatio(
       aspectRatio: _videoPlayerController.value.aspectRatio,

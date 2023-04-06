@@ -7,17 +7,17 @@ import 'login.dart';
 import 'movies.dart';
 
 void main() {
-  runApp(const ChoicePage());
+  runApp(choicepage());
 }
 
-class ChoicePage extends StatefulWidget {
-  const ChoicePage({super.key});
+class choicepage extends StatefulWidget {
+  const choicepage({super.key});
 
   @override
-  State<ChoicePage> createState() => _ChoicePageState();
+  State<choicepage> createState() => _choicepageState();
 }
 
-class _ChoicePageState extends State<ChoicePage> {
+class _choicepageState extends State<choicepage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: Sizer(builder: (context, orientation, deviceType) {
@@ -33,19 +33,18 @@ class _ChoicePageState extends State<ChoicePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const Loginpage()),
+                      MaterialPageRoute(builder: (context) => Loginpage()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      side: BorderSide(width: 1.0.sp, color: Colors.white),
-                      backgroundColor: Colors.red),
-                  child: const Text(
+                  child: Text(
                     'Sair',
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
+                  style: ElevatedButton.styleFrom(
+                      side: BorderSide(width: 1.0.sp, color: Colors.white),
+                      backgroundColor: Colors.red),
                 ),
               ),
               Container(
@@ -54,19 +53,18 @@ class _ChoicePageState extends State<ChoicePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const ChannelsPage()),
+                      MaterialPageRoute(builder: (context) => channelspage()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      side: BorderSide(width: 1.0.sp, color: Colors.white),
-                      backgroundColor: Colors.red),
-                  child: const Text(
+                  child: Text(
                     'Canais',
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
+                  style: ElevatedButton.styleFrom(
+                      side: BorderSide(width: 1.0.sp, color: Colors.white),
+                      backgroundColor: Colors.red),
                 ),
               ),
               SizedBox(height: 5.w),
@@ -79,15 +77,15 @@ class _ChoicePageState extends State<ChoicePage> {
                       MaterialPageRoute(builder: (context) => seriespage()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      side: BorderSide(width: 1.0.sp, color: Colors.white),
-                      backgroundColor: Colors.red),
-                  child: const Text(
+                  child: Text(
                     'Series',
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
+                  style: ElevatedButton.styleFrom(
+                      side: BorderSide(width: 1.0.sp, color: Colors.white),
+                      backgroundColor: Colors.red),
                 ),
               ),
               SizedBox(height: 5.w),
@@ -97,19 +95,18 @@ class _ChoicePageState extends State<ChoicePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const MoviesPage()),
+                      MaterialPageRoute(builder: (context) => moviespage()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      side: const BorderSide(width: 1.0, color: Colors.white),
-                      backgroundColor: Colors.red),
-                  child: const Text(
+                  child: Text(
                     'Filmes',
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
+                  style: ElevatedButton.styleFrom(
+                      side: BorderSide(width: 1.0, color: Colors.white),
+                      backgroundColor: Colors.red),
                 ),
               ),
             ]),

@@ -8,23 +8,20 @@ import 'Services/api.dart';
 import 'login.dart';
 
 void main() {
-  runApp(const ChannelsPage());
+  runApp(channelspage());
 }
 
-class ChannelsPage extends StatefulWidget {
-  const ChannelsPage({super.key});
-
+class channelspage extends StatefulWidget {
   @override
-  // ignore: library_private_types_in_public_api
-  _ChannelsPage createState() => _ChannelsPage();
+  _channelspage createState() => _channelspage();
 }
 
-class _ChannelsPage extends State<ChannelsPage> {
+class _channelspage extends State<channelspage> {
   List<dynamic> channels = [];
   String selectedCategory = '';
   var jsonOk = '';
   int _selectedIndex = 0; // armazena o índice do botão selecionado
-  final List<Color> _buttonColors = List.generate(
+  List<Color> _buttonColors = List.generate(
     //lista de cores
     100,
     (index) => Colors.black,
@@ -36,8 +33,8 @@ class _ChannelsPage extends State<ChannelsPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Token expirado'),
-          content: const SingleChildScrollView(
+          title: Text('Token expirado'),
+          content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor fazer login novamente.'),
@@ -46,11 +43,11 @@ class _ChannelsPage extends State<ChannelsPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Loginpage()));
+                    MaterialPageRoute(builder: (context) => Loginpage()));
               },
             ),
           ],
@@ -65,8 +62,8 @@ class _ChannelsPage extends State<ChannelsPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro ao se conectar com servidor'),
-          content: const SingleChildScrollView(
+          title: Text('Erro ao se conectar com servidor'),
+          content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Favor entrar em contato com administrador'),
@@ -75,11 +72,11 @@ class _ChannelsPage extends State<ChannelsPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Loginpage()));
+                    MaterialPageRoute(builder: (context) => Loginpage()));
               },
             ),
           ],
@@ -106,14 +103,11 @@ class _ChannelsPage extends State<ChannelsPage> {
       if (error is http.Response &&
           error.statusCode == 401 &&
           error.statusCode == 500) {
-        // ignore: use_build_context_synchronously
         _showErrorPopup(context);
       } else {}
     }
-
-    // ignore: unnecessary_null_comparison
+    print(selectedCategory[1]);
     if (selectedCategory[0] == null) {
-      // ignore: use_build_context_synchronously
       _showTokenExpiredPopup(context);
     }
   }
@@ -140,63 +134,65 @@ class _ChannelsPage extends State<ChannelsPage> {
 
   waiting() {
     while (channels.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
     return Padding(
       padding: EdgeInsets.only(top: 3.h, left: 2.w, right: 2.w),
       child: Row(children: [
         Expanded(
           flex: 1,
-          child: ListView.builder(
-              itemCount: channels.length,
-              itemBuilder: (context, index) {
-                final category = channels[index]['category'];
-                return StatefulBuilder(
-                  builder: (BuildContext context,
-                      StateSetter setState /*You can rename this!*/) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        updateSelectedCategory(category);
-                        setState(() {
-                          if (_selectedIndex == index) {
-                            _selectedIndex = -1; // deselecionar o botão
-                            _buttonColors[index] = Colors
-                                .black; // definir a cor preta para o botão deselecionado
-                          } else {
-                            if (_selectedIndex != -1) {
+          child: Container(
+            child: ListView.builder(
+                itemCount: channels.length,
+                itemBuilder: (context, index) {
+                  final category = channels[index]['category'];
+                  return StatefulBuilder(
+                    builder: (BuildContext context,
+                        StateSetter setState /*You can rename this!*/) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          updateSelectedCategory(category);
+                          setState(() {
+                            if (_selectedIndex == index) {
+                              _selectedIndex = -1; // deselecionar o botão
+                              _buttonColors[index] = Colors
+                                  .black; // definir a cor preta para o botão deselecionado
+                            } else {
+                              if (_selectedIndex != -1) {
+                                _buttonColors[_selectedIndex] = Colors
+                                    .black; // definir a cor preta para o botão anteriormente selecionado
+                              }
+                              _selectedIndex = index; // selecionar o novo botão
                               _buttonColors[_selectedIndex] = Colors
-                                  .black; // definir a cor preta para o botão anteriormente selecionado
+                                  .red; // definir a cor vermelha para o botão selecionado
                             }
-                            _selectedIndex = index; // selecionar o novo botão
-                            _buttonColors[_selectedIndex] = Colors
-                                .red; // definir a cor vermelha para o botão selecionado
-                          }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        side: const BorderSide(width: 1.0, color: Colors.white),
-                        backgroundColor: _buttonColors[index],
-                      ),
-                      child: Text(
-                        category,
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: Colors.white,
+                          });
+                        },
+                        child: Text(
+                          category,
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              }),
+                        style: ElevatedButton.styleFrom(
+                          side: BorderSide(width: 1.0, color: Colors.white),
+                          backgroundColor: _buttonColors[index],
+                        ),
+                      );
+                    },
+                  );
+                }),
+          ),
         ),
         Expanded(
             flex: 3,
-            child: Column(children: [
+            child: Container(
+                child: Column(children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8, top: 0),
                 child: Text(
                   selectedCategory,
-                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
@@ -213,21 +209,21 @@ class _ChannelsPage extends State<ChannelsPage> {
                       .expand((channel) => channel['resultList'])
                       .map((movie) => Expanded(
                             flex: 2,
-                            child: SizedBox(
-                              height: 45.w,
+                            child: Container(
+                              height: 50.w,
                               child: ElevatedButton(
                                 onPressed: () =>
                                     handleChannelPress(movie['link'], context),
                                 style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.black,
+                                  primary: Colors.black,
+                                  onPrimary: Colors.white,
                                 ),
                                 child: Column(
                                   children: [
                                     Stack(
                                       children: [
-                                        SizedBox(
-                                          height: 40.w,
+                                        Container(
+                                          height: 45.w,
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
@@ -275,7 +271,7 @@ class _ChannelsPage extends State<ChannelsPage> {
                       .toList(),
                 ),
               )
-            ]))
+            ])))
       ]),
     );
   }
