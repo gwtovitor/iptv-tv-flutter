@@ -9,15 +9,15 @@ import 'Services/api.dart';
 import 'login.dart';
 
 void main() {
-  runApp(SeriesPage());
+  runApp(seriespage());
 }
 
-class SeriesPage extends StatefulWidget {
+class seriespage extends StatefulWidget {
   @override
-  _SeriesPage createState() => _SeriesPage();
+  _seriespage createState() => _seriespage();
 }
 
-class _SeriesPage extends State<SeriesPage> {
+class _seriespage extends State<seriespage> {
   List<dynamic> channels = [];
   String selectedCategory = '';
   var indice = 0;
@@ -102,6 +102,7 @@ class _SeriesPage extends State<SeriesPage> {
         headers: {'Authorization': 'Bearer $token'},
       );
       final parsedResponse = jsonDecode(response.body);
+      print(parsedResponse);
       setState(() {
         channels = parsedResponse;
         selectedCategory = channels[0]['category'];

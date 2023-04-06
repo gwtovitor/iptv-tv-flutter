@@ -76,7 +76,7 @@ class _ChoicePageState extends State<ChoicePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SeriesPage()),
+                      MaterialPageRoute(builder: (context) => seriespage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
