@@ -31,7 +31,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Televido TV"
+        android:label="Televido"
         android:usesCleartextTraffic="true" >
         <activity
             android:name="com.example.iptv_flutter_app.MainActivity"

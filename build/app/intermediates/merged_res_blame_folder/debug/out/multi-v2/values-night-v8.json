@@ -4,7 +4,7 @@
             "outputFile": "com.example.iptv_flutter_app-mergeDebugResources-11:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter-tv\\iptv-tv\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "C:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

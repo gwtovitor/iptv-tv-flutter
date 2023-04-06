@@ -42,25 +42,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter-tv\\iptv-tv\\android\\app\\src\\main\\res\\values\\styles.xml",
-                    "from": {
-                        "startLines": "3,14",
-                        "startColumns": "4,4",
-                        "startOffsets": "176,832",
-                        "endLines": "7,16",
-                        "endColumns": "12,12",
-                        "endOffsets": "483,998"
-                    },
-                    "to": {
-                        "startLines": "103,107",
-                        "startColumns": "4,4",
-                        "startOffsets": "6151,6332",
-                        "endLines": "106,109",
-                        "endColumns": "12,12",
-                        "endOffsets": "6327,6496"
-                    }
-                },
-                {
                     "source": "C:\\Users\\Vitor\\.gradle\\caches\\transforms-3\\78c544957dbebfe573b309970a903c1a\\transformed\\lifecycle-runtime-2.3.1\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2",
@@ -92,6 +73,25 @@
                         "startOffsets": "5434,5504,5566,5631,5695,5772,5837,5927,6011",
                         "endColumns": "69,61,64,63,76,64,89,83,68",
                         "endOffsets": "5499,5561,5626,5690,5767,5832,5922,6006,6075"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Vitor\\Documents\\GitHub\\iptv-flutter\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "3,14",
+                        "startColumns": "4,4",
+                        "startOffsets": "176,832",
+                        "endLines": "7,16",
+                        "endColumns": "12,12",
+                        "endOffsets": "483,998"
+                    },
+                    "to": {
+                        "startLines": "103,107",
+                        "startColumns": "4,4",
+                        "startOffsets": "6151,6332",
+                        "endLines": "106,109",
+                        "endColumns": "12,12",
+                        "endOffsets": "6327,6496"
                     }
                 }
             ]
