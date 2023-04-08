@@ -44,7 +44,7 @@
 31-->[androidx.core:core:1.7.0] C:\Users\Vitor\.gradle\caches\transforms-3\643c36827667a18b446caa098937e0bd\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
 32        android:debuggable="true"
 33        android:icon="@mipmap/ic_launcher"
-34        android:label="Televido TV"
+34        android:label="Fluxbox TV"
 35        android:usesCleartextTraffic="true" >
 36        <activity
 37            android:name="com.example.iptv_flutter_app.MainActivity"

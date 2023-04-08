@@ -232,20 +232,15 @@ class _LoginpageState extends State<Loginpage> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: 10.w),
+                    SizedBox(height: 5.w),
                     Container(
-                      alignment: Alignment.center,
-                      child: const Text(
-                        "TELEVIDO",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 32,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
+                        height: 20.w,
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                        )),
                     SizedBox(
-                      height: 10.w,
+                      height: 5.w,
                     ),
                     Container(
                         width: 70.h,
